@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "cic-mc1"
+version = "0.1.0"
+description = ""
+authors = ["Nicola Rohner <social@nicolarohner.ch>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dask-ml = {extras = ["xgboost"], version = "^2024.4.4"}
+tqdm = "^4.66.5"
+matplotlib = "^3.9.2"
+bokeh = "^3.6.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
