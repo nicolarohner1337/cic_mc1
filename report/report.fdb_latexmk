@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1728481242.98007 "c:/Users/socia/Documents/GitHub/cic_mc1/report/report.tex" "report.pdf" "report" 1728481243.71723 0
+["pdflatex"] 1728643532.27567 "c:/Users/socia/Documents/GitHub/cic_mc1/report/report.tex" "report.pdf" "report" 1728643532.93399 0
   "C:/Users/socia/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1728477292 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/socia/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1095.pk" 1728478032 12668 f251edee317206cda60b425a07244242 ""
   "C:/Users/socia/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1728475494 11948197 86d59747a1cbc2712d5ab03c91cfc3c2 ""
@@ -29,6 +29,7 @@
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
+  "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1247596667 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1247596667 32726 39f0f9e62e84beb801509898a605dbd5 ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1247596667 32626 5abc8bb2f28aa647d4c70f8ea38cc0d3 ""
@@ -78,10 +79,10 @@
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/socia/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "c:/Users/socia/Documents/GitHub/cic_mc1/report/report.tex" 1728481241 8662 e434e5259ca35eb4385e81330445309f ""
-  "report.aux" 1728481243 2188 6f07a9b03d9d77c0f97fc77fdee09796 "pdflatex"
-  "report.out" 1728481243 2275 c058d56c86e866a051f3f0770ca81e02 "pdflatex"
-  "report.tex" 1728481241 8662 e434e5259ca35eb4385e81330445309f ""
+  "c:/Users/socia/Documents/GitHub/cic_mc1/report/report.tex" 1728643530 7888 73568a4fa2d214fd69f128ea6a6bd8c4 ""
+  "report.aux" 1728643532 1640 cf7aa3839918ba5332f4bd3d246a784e "pdflatex"
+  "report.out" 1728643532 1843 32710b07de84e3226b38068f03e0212f "pdflatex"
+  "report.tex" 1728643530 7888 73568a4fa2d214fd69f128ea6a6bd8c4 ""
   (generated)
   "report.aux"
   "report.log"
