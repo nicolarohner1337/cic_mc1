@@ -1,10 +1,9 @@
-# Project Title
+# cic-mc1
 
-cic-mc1
 
 ## Description
 
-Stock market rpediction, mainly focused on the paralelization of the data processing and the prediction model.
+Stock market prediction, mainly focused on the parallelization of the data processing and the prediction model.
 
 ## Installation
 
