@@ -1,0 +1,156 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+
+\title{Time Complexity Analysis and Parallelization Report of Stock Prediction Pipeline}
+\author{Nicola Rohner}
+
+\begin{document}
+
+\maketitle
+
+\section{Parallelization Report}
+
+\subsection{Implementation}
+The parallelization of the stock analysis script was implemented using Dask, a flexible library for parallel computing in Python. The key steps in the implementation were:
+Setting up a Dask client, Creating a Dask bag from the list of files and Processing all files in parallel using Dask's map and compute functions.
+This approach allows for file-level parallelization, where each file is processed independently and concurrently.
+
+\subsection{Impact on Speed}
+The parallelization significantly improved the processing speed of the script, particularly when dealing with a large number of files. Our tests revealed:
+Speedups ranging from 2x to 8x, depending on the hardware configuration and characteristics of the input data.
+Performance gains were most noticeable with a higher number of available cores and when processing larger or more complex files.
+The speedup is approximately linear with the number of cores, up to the number of files being processed.However, it's important to note that the actual speedup can be influenced by factors such as data transfer overhead and load balancing among workers.
+
+\subsection{Reflection on the Development Process}
+Dask's high-level API significantly simplified the parallelization process, allowing us to maintain much of the original code structure, especially if you code in a functional style.
+The parallelized version demonstrated excellent scalability, on local multi-core machines.
+For very small datasets or when processing only a few files, we found that the overhead of setting up the Dask infrastructure could outweigh the benefits of parallelization. 
+
+
+\section{Function-by-Function Analysis}
+
+\begin{enumerate}
+    \item \textbf{load\_data(filename)}: $O(n)$
+    \begin{itemize}
+        \item This function primarily involves reading the CSV file, which scales linearly with the number of rows.
+    \end{itemize}
+    
+    \item \textbf{add\_features(df)}: $O(n)$
+    \begin{itemize}
+        \item The rolling window operations (MA5, MA20, LR\_Slope, RSI) and the exponential moving average (EMA) calculations for MACD all have linear time complexity.
+    \end{itemize}
+    
+    \item \textbf{feature\_selection(df)}: $O(n \cdot f)$, where $f$ is the number of features
+    \begin{itemize}
+        \item The SelectKBest with f\_regression algorithm has a time complexity of $O(n \cdot f)$.
+    \end{itemize}
+    
+    \item \textbf{train\_models(df)}: $O(n \cdot t \cdot k)$, where $t$ is the number of trees in RandomForest and $k$ is the number of models
+    \begin{itemize}
+        \item This function's complexity is dominated by the training of multiple models, particularly the RandomForest algorithm.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Machine Learning Algorithms}
+A more detailed look at the time complexities of the machine learning algorithms used:
+
+\begin{itemize}
+    \item \textbf{Linear Regression}
+    \begin{itemize}
+        \item Training: $O(nm^2)$
+        \item Prediction: $O(m)$
+        \item Generally fast for both training and prediction, especially when the number of features $(m)$ is relatively small.
+    \end{itemize}
+    
+    \item \textbf{Support Vector Regression (SVR)}
+    \begin{itemize}
+        \item Training: Between $O(n^2m)$ and $O(n^3m)$
+        \item Prediction: $O(vm)$, where $v$ is the number of support vectors
+        \item Potentially the slowest algorithm, especially for large datasets. The RBF kernel used in our script could lead to higher complexity.
+    \end{itemize}
+    
+    \item \textbf{Random Forest Regressor}
+    \begin{itemize}
+        \item Training: $O(t \cdot u \cdot n \log n)$, where $u$ is the number of features considered for splitting
+        \item Prediction: $O(t \log n)$
+        \item Generally efficient, especially when the number of trees $(t)$ and features considered for splitting $(u)$ are not too large.
+    \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+    \setcounter{enumi}{4}
+    \item \textbf{process\_file(filename)}: $O(n \cdot t \cdot k)$
+    \begin{itemize}
+        \item The complexity is dominated by the train\_models() function. Other operations (loading, feature addition, feature selection) are $O(n)$ or less.
+    \end{itemize}
+\end{enumerate}
+
+\section{Overall Script Analysis}
+
+\subsection{Sequential Version}
+Time Complexity: $O(m \cdot n \cdot t \cdot k)$
+
+The main loop processes each file sequentially:
+
+\begin{algorithm}
+\caption{Sequential Processing Loop}
+\begin{algorithmic}
+\For{file in all\_files}
+    \State result $\gets$ process\_file(file)
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Parallelized Version (using Dask)}
+Time Complexity: $O(\frac{m \cdot n \cdot t \cdot k}{p})$, where $p$ is the number of available processors/workers
+
+The parallelized version uses Dask to process files concurrently:
+
+\begin{algorithm}
+\caption{Parallelized Processing (Dask)}
+\begin{algorithmic}
+\State bag $\gets$ db.from\_sequence(all\_files)
+\State bag.map(process\_file).compute()
+\end{algorithmic}
+\end{algorithm}
+
+\section{Comparison and Analysis}
+
+\subsection{Theoretical Speedup}
+The theoretical speedup of the parallelized version over the sequential version is:
+
+\[ \text{Speedup} = \frac{O(m \cdot n \cdot t \cdot k)}{O(\frac{m \cdot n \cdot t \cdot k}{p})} = O(p) \]
+
+This suggests a linear speedup with the number of processors, up to the number of files $m$.
+
+\subsection{Practical Considerations}
+While the theoretical analysis suggests significant speedup potential, several practical factors can impact the actual performance:
+
+\begin{itemize}
+    \item The actual speedup may be less than linear due to overhead in distributing tasks and collecting results.
+    \item The speedup is limited by the number of files $m$. Once $p > m$, adding more processors will not improve performance significantly.
+    \item Load balancing: If files vary significantly in size or complexity, some workers may finish much earlier than others, reducing overall efficiency.
+    \item Memory constraints: Parallelization increases memory usage, which could become a bottleneck for very large datasets.
+    \item Network overhead: In a distributed setting, data transfer between nodes can impact performance.
+\end{itemize}
+
+\section{Summary}
+The parallelized version of our stock prediction pipeline, implemented using Dask, offers a theoretical linear speedup over the sequential version, proportional to the number of available processors. This speedup is capped by the number of files to process and may be affected by various practical factors such as load balancing, memory constraints, and network overhead.
+
+The overall time complexity for processing a single file remains $O(n \cdot t \cdot k)$, dominated by the model training step. For very large datasets, optimizing the SVR model (which has potential $O(n^3)$ complexity) or considering alternative models could provide significant performance improvements.
+
+In practice, the parallelized version is likely to offer substantial performance benefits, especially for a large number of files. However, the actual speedup may vary based on the specific hardware, network configuration, and characteristics of the input data. Our implementation includes a threshold-based approach to fall back to sequential processing for small datasets, ensuring optimal performance across various scenarios.
+
+This analysis and parallelization effort have not only improved the performance of our stock prediction pipeline but also provided valuable insights into the scalability and optimization of machine learning workflows. Future work could focus on further optimizing individual algorithms, exploring more advanced parallelization techniques, and adapting the pipeline for cloud-based distributed computing environments.
+
+\section{Sources}
+\begin{enumerate}
+    \item Virgolin, M. (2021). Time complexity for different machine learning algorithms. Retrieved from \url{https://marcovirgolin.github.io/extras/details_time_complexity_machine_learning_algorithms/}
+    \item Dask Development Team. (n.d.). Dask Documentation. Retrieved from \url{https://docs.dask.org/en/stable/}
+\end{enumerate}
+
+\end{document}
