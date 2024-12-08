@@ -11,6 +11,7 @@ dask-ml = {extras = ["xgboost"], version = "^2024.4.4"}
 tqdm = "^4.66.5"
 matplotlib = "^3.9.2"
 bokeh = "^3.6.0"
+pandas = "^2.2.3"
 
 
 [tool.poetry.group.dev.dependencies]

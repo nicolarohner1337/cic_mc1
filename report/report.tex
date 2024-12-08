@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 
-\title{Time Complexity Analysis and Parallelization Report of Stock Prediction Pipeline}
+\title{Parallelization Report of Stock Prediction Pipeline}
 \author{Nicola Rohner}
 
 \begin{document}
@@ -69,22 +69,16 @@ For very small datasets or when processing only a few files, I found that the ov
         \item The overall complexity is determined by the most computationally expensive operation, train\_models
     \end{itemize}
 
-    \item \textbf{Overall Script Complexity}: $O(F \cdot (k \cdot n^2 \cdot m) / P)$
+    \item \textbf{Overall Script Complexity}: $O(F \cdot k \cdot n^2 \cdot m)$
     \begin{itemize}
         \item $F$: Total number of files to process
         \item $k$: Number of cross-validation folds
         \item $n$: Number of samples in the largest file
         \item $m$: Number of features
-        \item $P$: Number of parallel processes (depends on available cores)
     \end{itemize}
     \begin{itemize}
         \item File listing operations: $O(F)$
         \item Dask bag creation: $O(F)$
-        \item Parallel processing with Dask:
-            \begin{itemize}
-                \item Each file processed: $O(k \cdot n^2 \cdot m)$
-                \item Parallel execution reduces time by factor of $P$
-            \end{itemize}
         \item The dominant factor is the parallel execution of process\_file for each file
     \end{itemize}
 \end{enumerate}
@@ -104,7 +98,7 @@ A more detailed look at the time complexities of the machine learning algorithms
     \begin{itemize}
         \item Training: $O(n^2m)$
         \item Prediction: $O(vm)$, where $v$ is the number of support vectors
-        \item Potentially the slowest algorithm, especially for large datasets. The RBF kernel used in our script could lead to higher complexity.
+        \item Potentially the slowest algorithm, especially for large datasets.
     \end{itemize}
     
     \item \textbf{Random Forest Regressor}
