@@ -3,7 +3,7 @@
 
 ## Description
 
-Stock market prediction, mainly focused on the parallelization of the data processing and the prediction model.
+Stock market prediction, mainly focused on the parallelization of the data processing.
 
 ## Installation
 
