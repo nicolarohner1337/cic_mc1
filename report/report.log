@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.9)  8 DEC 2024 14:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.9)  8 DEC 2024 14:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -373,12 +373,12 @@ Package pdftex.def Info: runtime2.png  used on input line 153.
 <amdahl.png, id=80, 1284.8pt x 1003.75pt>
 File: amdahl.png Graphic file (type png)
 <use amdahl.png>
-Package pdftex.def Info: amdahl.png  used on input line 184.
+Package pdftex.def Info: amdahl.png  used on input line 183.
 (pdftex.def)             Requested size: 362.37569pt x 283.10042pt.
 
 
 [4 <./runtime2.png>]
-Overfull \hbox (51.54825pt too wide) in paragraph at lines 190--191
+Overfull \hbox (51.54825pt too wide) in paragraph at lines 189--190
 \OT1/cmtt/m/n/10.95 marcovirgolin . github . io / extras / details _ time _ complexity _ machine _ learning _ algorithms/$[] 
  []
 
@@ -393,17 +393,17 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 6C38F33888384B1B03263353E0F29C09;1687.
  ) 
 Here is how much of TeX's memory you used:
- 10354 strings out of 473899
- 161019 string characters out of 5726500
+ 10353 strings out of 473899
+ 161012 string characters out of 5726500
  566869 words of memory out of 5000000
  33080 multiletter control sequences out of 15000+600000
  564647 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,347b,582s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\socia\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/socia/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (5 pages, 390791 bytes).
+Output written on report.pdf (5 pages, 390583 bytes).
 PDF statistics:
- 158 PDF objects out of 1000 (max. 8388607)
- 32 named destinations out of 1000 (max. 500000)
+ 157 PDF objects out of 1000 (max. 8388607)
+ 31 named destinations out of 1000 (max. 500000)
  104 words of extra memory for PDF output out of 10000 (max. 10000000)
 
