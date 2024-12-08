@@ -4,24 +4,27 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
 
 \title{Time Complexity Analysis and Parallelization Report of Stock Prediction Pipeline}
 \author{Nicola Rohner}
 
 \begin{document}
-
 \maketitle
 
 \section{Parallelization Report}
 
 \subsection{Implementation}
-The parallelization of the stock analysis script was implemented using Dask, a flexible library for parallel computing in Python. The key steps in the implementation were:
+The parallelization of the stock analysis script was implemented using Dask. The key steps in the implementation were:
 Setting up a Dask client, Creating a Dask bag from the list of files and Processing all files in parallel using Dask's map and compute functions.
 This approach allows for file-level parallelization, where each file is processed independently and concurrently.
+Note:
+For example cross-validation is not parallelized, processes would compete for the same CPU threads. Nested parallelism typically leads to thread thrashing and overhead. Was more efficient to keep ETL parallel and cross-validation sequential within each worker
 
 \subsection{Impact on Speed}
 The parallelization improved the processing speed of the script, particularly when dealing with a large number of files. My test revealed:
-A Speedup around 8x, performance gains were most noticeable with a higher number of available cores.
+A max. Speedup around 6.22x, performance gains were most noticeable with a higher number of processes.
 
 \subsection{Reflection on the Development Process}
 Dask's high-level API significantly simplified the parallelization process, allowing me to maintain much of the original code structure, especially if you code in a functional style.
@@ -116,7 +119,6 @@ A more detailed look at the time complexities of the machine learning algorithms
 
 \subsection{Theoretical Complexity}
 Sequential version: $O(F \cdot k \cdot n^2 \cdot m)$
-Parallelized version: $O(\frac{F \cdot k \cdot n^2 \cdot m}{P})$
 
 Where:
 \begin{itemize}
@@ -124,35 +126,76 @@ Where:
     \item $k$: Number of cross-validation folds
     \item $n$: Number of samples in the largest file
     \item $m$: Number of features
-    \item $P$: Number of parallel processes
 \end{itemize}
 
-\subsection{Theoretical Speedup}
-The theoretical speedup of the parallelized version over the sequential version is:
+\subsection{Experiments}
+The runtimes of the parallelized version looks as follows:
 
-\[ \text{Speedup} = \frac{O(F \cdot k \cdot n^2 \cdot m)}{O(\frac{F \cdot k \cdot n^2 \cdot m}{P})} = O(P) \]
+Settings for the runs:
+\begin{itemize}
+    \item 1 process: $n\_workers = 1$ and $n\_threads = 1$
+    \item 2 processes: $n\_workers = 2$ and $n\_threads = 1$
+    \item 4 processes: $n\_workers = 2$ and $n\_threads = 2$
+    \item 9 processes: $n\_workers = 3$ and $n\_threads = 3$
+    \item 16 processes: $n\_workers = 4$ and $n\_threads = 4$
+    
+\end{itemize}
 
-This suggests a linear speedup with the number of processors, up to the number of files $F$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{runtime.png}
+    \caption{Speedup of Parallelized Stock Prediction Pipeline}
+\end{figure}
+
+The speedup shows strong initial gains when adding the first few processes, but flattens after 9 processes. This could be due communication overhead between processes becoming significant, and resource contention as processes compete for CPU/memory.
+The experiment was run on a machine with the following CPU:\newline
+$11th Gen Intel(R) Core(TM) i9-11900K @ 3.50GHz, 3504 MHz, 8 Cores, 16 Logical Processors$.
+\newline \newline
+For this experiment, the number of files was varied from 1 to 8539, and the processing time was measured for each configuration.
+Configurations: $n\_workers = 1, n\_threads = 1$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{runtime2.png}
+    \caption{Processing Time vs Number of Files}
+\end{figure}
+
+Looking at the plots, we can see that with 1 worker and 1 thread:
+\begin{enumerate}
+    \item The processing time increases predictably as files increase (from 1 to 10,000 files)
+    \item The relationship between files and time shows a mostly linear trend in the left plot
+    \item The log-log scale (right plot) reveals a scaling factor of 0.81, showing the relationship between files and processing time
+\end{enumerate}
 
 \subsection{Analysis}
-\begin{itemize}
-    \item The parallelized version distributes the workload across $P$ processes, potentially reducing execution time by a factor of $P$.
-    \item Ideal speedup is achieved when $P \leq F$, as each file can be processed independently.
-    \item When $P > F$, additional processors may not contribute to further speedup due to the limited number of files.
-    \item The space complexity increases with parallelization to $O(P \cdot n \cdot m)$, as each process requires memory for its data and models.
-\end{itemize}
 
-\subsection{Limitations}
-\begin{itemize}
-    \item The speedup is bounded by the number of files $F$, following Amdahl's Law.
-    \item I/O operations and network latency may become bottlenecks in a distributed setting.
-    \item The effectiveness of parallelization depends on the uniformity of file sizes and processing times.
-\end{itemize}
+\[ \text{Speedup}_{\text{overall}} = \frac{1}{(1-p) + \frac{p}{n}} \]
+
+For example, with our 16 processes case:
+\[ \text{Speedup}(16) = \frac{373 \text{ min}}{60 \text{ min}} = 6.22\times \]
+
+Using this observed speedup, we can determine the parallelizable portion $p$:
+\[ 6.22 = \frac{1}{(1-p) + \frac{p}{16}} \]
+\[ p \approx 0.90 \text{ or } 90\% \text{ parallelizable} \]
+
+Substituting back into Amdahl's formula:
+\[ \text{Speedup}(n) = \frac{1}{(1-0.90) + \frac{0.90}{n}} = \frac{1}{0.1 + \frac{0.90}{n}} \]
+
+
+The speedup is bounded to Amdahl's Law, which limits the maximum speedup achievable by parallelization.
+Which in my case is around 10x, as the parallelizable portion is 90\%.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{amdahl.png}
+    \caption{Amdahl's Law: Speedup vs Number of Processes}
+\end{figure}
 
 \section{Sources}
 \begin{enumerate}
-    \item Virgolin, M. (2021). Time complexity for different machine learning algorithms. Retrieved from \url{https://marcovirgolin.github.io/extras/details_time_complexity_machine_learning_algorithms/}
-    \item Dask Development Team. (n.d.). Dask Documentation. Retrieved from \url{https://docs.dask.org/en/stable/}
+    \item Virgolin, M. (2021). Time complexity for different machine learning algorithms.\url{https://marcovirgolin.github.io/extras/details_time_complexity_machine_learning_algorithms/}
+    \item Dask Development Team. Dask Documentation.  \url{https://docs.dask.org/en/stable/}
+    \item Amdahl's Law. \url{https://en.wikipedia.org/wiki/Amdahl%27s_law}
 \end{enumerate}
 
 \end{document}
